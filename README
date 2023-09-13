@@ -1,6 +1,6 @@
 # Quest99
 
-Tautan menuju aplikasi adaptable Inventoreal bisa diakses melalui [tautan ini](ristek.link/Quest99).
+Tautan menuju aplikasi adaptable Quest99 bisa diakses melalui [tautan ini](ristek.link/Quest99).
 
 ## **Membuat proyek Django baru**
 
@@ -96,7 +96,7 @@ urlpatterns = [
 
 ## **Cara melakukan routing pada proyek agar dapat menjalankan aplikasi `main`**
 
-1. Buka file `urls.py` di dalam folder proyek `inventoreal` dan import modul `include` dari `django.urls` (`from django.urls import path, include`) untuk melakukan konfigurasi routing tampilan `main`
+1. Buka file `urls.py` di dalam folder proyek `quest99` dan import modul `include` dari `django.urls` (`from django.urls import path, include`) untuk melakukan konfigurasi routing tampilan `main`
 
 2. Di dalam variabel urlpatterns, tambahkan path yang akan mengarahkan ke aplikasi 'main', bisa menggunakan `include()` untuk menghubungkan ke file `urls.py` di aplikasi 'main'.
 
