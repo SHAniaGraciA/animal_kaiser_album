@@ -212,9 +212,9 @@ TEMPLATES = [
 ```
 
 ## **Cara membuat input form untuk menambahkan objek model pada aplikasi**
-1. Jalankan virtual environment terlebih dahulu. Untuk windows, menggunakan command `env\Scripts\activate.bat` dan untuk unix menggunakan command `source env/bin/activate`
+1. Jalankan virtual environment terlebih dahulu.
 
-2. Kita implementasikan dahulu sebuah skeleton sebagai kerangka viewsnya. Untuk tata caranya, silahkan mengikuti [link ini](#cara-mengimplementasikan-skeleton-sebagai-kerangka-views)
+2. Implementasikan dahulu sebuah skeleton sebagai kerangka viewsnya. 
 
 3. Buat file terbaru, yaitu `forms.py` pada folder `main` yang bertujuan untuk membuat struktur form yang dapat menerima data produk baru saat diinput, dan tambahkan kode di bawah ini
 ```py
@@ -226,8 +226,6 @@ class ItemForm(ModelForm):
         model = Item
         fields = ["name","description", "category", "amount"]
 ```
-> [!NOTE]
-> isi variabel `fields` disesuaikan dengan informasi / variabel apa saja yang ingin diminta dari user
 
 4. Buka file `main/views.py` dan tambahkan beberapa import serta function `create_item` untuk menghasilkan form yang dapat menambahkan data produk secara otomatis ketika data di-_submit_ dari form
 ```py
