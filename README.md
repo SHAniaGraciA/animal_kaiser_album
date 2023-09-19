@@ -167,3 +167,289 @@ ViewModel = Mengelola tampilan dan logika tampilan yang terkait dengan `View`.
 ### Perbedaan MVC, MVT, dan MVVM
 
 MVC memegang fungsi masing - masing dalam menampilkan program. Controller berperan penting dalam mengontrol aliran `Model` dan `View`. MVC sendiri tidak berbeda jauh dengan MVC hanya saja `Template` memegang kendali dalam menentukkan tampilan. Sedangkan MVVM memisahkan `View` dari `Model` sehingga fokus pada tampilan dan logika serta tampilan khusus diurus `ViewModel` 
+
+
+## **Cara mengimplementasikan _Skeleton_ sebagai Kerangka Views**
+1. Buat folder bernama `templates` di dalam root folder dan buatlah file bernama `base.html`. Isi file tersebut dengan kode di bawah ini.
+```html
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+        {% block meta %}
+        {% endblock meta %}
+    </head>
+
+    <body>
+        {% block content %}
+        {% endblock content %}
+    </body>
+</html>
+```
+2. Buka `settings.py` pada subdirektori `quest99` dan cari variabel `TEMPLATES` yang bertipe data list of dictionaries, kemudian sesuaikan value dari key `DIRS` untuk mengarahkan ke folder `templates` yang telah dibuat sebelumnya.
+```py
+TEMPLATES = [
+    {
+        ...
+        'DIRS': [BASE_DIR / 'templates'],
+        ...
+    }
+]
+```
+3. Pada `main/templates/main.html`, tambahkan kode di bawah ini untuk meng-_extend_ dari `base.html` yang baru saja dibuat.
+```html
+{% extends 'base.html' %}
+{% block content %}
+    ...
+    //kode html yang telah dibuat sebelumnya
+    ...
+{% endblock content %}
+```
+
+## **Cara membuat input form untuk menambahkan objek model pada aplikasi**
+1. Jalankan virtual environment terlebih dahulu. Untuk windows, menggunakan command `env\Scripts\activate.bat` dan untuk unix menggunakan command `source env/bin/activate`
+
+2. Kita implementasikan dahulu sebuah skeleton sebagai kerangka viewsnya. Untuk tata caranya, silahkan mengikuti [link ini](#cara-mengimplementasikan-skeleton-sebagai-kerangka-views)
+
+3. Buat file terbaru, yaitu `forms.py` pada folder `main` yang bertujuan untuk membuat struktur form yang dapat menerima data produk baru saat diinput, dan tambahkan kode di bawah ini
+```py
+from django.forms import ModelForm
+from main.models import Item
+
+class ItemForm(ModelForm):
+    class Meta:
+        model = Item
+        fields = ["name","description", "category", "amount"]
+```
+> [!NOTE]
+> isi variabel `fields` disesuaikan dengan informasi / variabel apa saja yang ingin diminta dari user
+
+4. Buka file `main/views.py` dan tambahkan beberapa import serta function `create_item` untuk menghasilkan form yang dapat menambahkan data produk secara otomatis ketika data di-_submit_ dari form
+```py
+from django.http import HttpResponseRedirect
+from main.forms import ItemForm
+from django.urls import reverse
+...
+def create_item(request):
+    form = ItemForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "create_item.html", context)
+```
+
+## **Cara menambahkan fungsi views untuk melihat objek yang sudah ditambahkan (HTML, XML, JSON, XML by ID, dan JSON by ID)**
+### **HTML**
+1. Pada file `main/views.py`, ubah function `show_main` untuk mengambil seluruh object Item yang tersimpan pada database
+```py
+def show_main(request):
+
+    item = Item.objects.all()
+    context = {
+        'char_name' : 'Bonaparte',
+        'role': 'Stealth Assasin',
+        'items': item
+    }
+    
+    
+
+    return render(request, "main.html", context)
+```
+
+2. Buka `main/urls.py`, lalu import function `create_item` yang sudah dibuat tadi dan tambahkan path url ke dalam url patterns untuk mengakses function tadi.
+```py
+from main.views import show_main, create_item
+...
+urlpatterns = [
+    ...
+    path('create-item', create_item, name='create_item'),
+]
+```
+
+3. Buat file `create_item.html` di dalam folder `main/templates` yang berfungsi sebagai tampilan form untuk meminta input data. Berikut adalah isi dari filenya.
+```py
+{% extends 'base.html' %} 
+
+{% block content %}
+<h1>Add New Item</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Add Item"/>
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}
+```
+
+4. Buka `main.html` dalam folder `main/templates` dan tambahkan kode di dalam `{% block content %}` untuk menampilkan barang yang di-_input_ melalui `create_item.html` dalam bentuk tabel.
+```html
+...
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Amount</th>
+        <th>Description</th
+    </tr>
+    
+    {% for item in items %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.category }}</td>
+            <td>{{ item.amount }}</td>
+            <td>{{ item.description }}</td>
+        </tr>
+    {% endfor %}
+</table>
+...
+```
+### **XML**
+1. Buka file `main/views.py`, kemudian import `HttpResponse` dan `Serializer` dan tambahkan function `show_xml`
+```py
+from django.http import HttpResponse
+from django.core import serializers
+...
+def show_xml(request):
+    data = Item.objects.all()
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+```
+> [!NOTE]
+> serializers digunakan untuk translate objek model menjadi format lain.
+
+2. Buka `main/urls.py` untuk import function `show_xml` dan tambahkan routing url ke url patterns sebagai akses menuju fungsi tersebut
+```py
+from main.views import show_main, create_item, show_xml
+...
+urlpatterns = [
+    ...
+    path('xml/', show_xml, name='show_xml'),
+    ...
+]
+```
+
+### **JSON**
+1. Buka file `views.py` pada folder `main` dan buat fungsi `show_json` yang menerima parameter `request`
+```py
+def show_json(request):
+    data = Item.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+```
+
+2. Buka `urls.py` yang ada pada folder `main` dan import fungsi yang sudah dibuat tadi `(show_json)` dan tambahkan path url ke dalam urlpatterns untuk mengakses fungsi yang diimpor tadi
+```py
+from main.views import show_main, create_item, show_xml, show_json
+...
+urlpatterns = [
+    ...
+    path('json/', show_json, name='show_json'),
+    ...
+]
+```
+
+### **XML dan JSON by ID**
+1. Buka kembali folder `main` dan akses file `urls.py`, kemudian buat function baru, `show_xml_by_id` dan `show_json_by_id` dengan mengembalikan function berupa `HttpResponse` yang berisi parameter data hasil query yang sudah diserialisasi menjadi JSON atau XML dan parameter `content_type`
+```py
+...
+def show_xml_by_id(request, id):
+    data = Item.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+def show_json_by_id(request, id):
+    data = Item.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+...
+```
+
+2. Buka `urls.py` yang ada pada folder `main` dan import fungsi yang sudah dibuat tadi, yaitu `show_xml_by_id` dan `show_json_by_id`, kemudian perbarui path url yang di dalam urlpatterns untuk mengakses kedua fungsi tersebut.
+```py
+from django.urls import path
+from main.views import show_main, create_item, show_xml, show_json, show_xml_by_id, show_json_by_id 
+
+app_name = 'main'
+
+urlpatterns = [
+    path('', show_main, name='show_main'),
+    path('create-item', create_item, name='create_item'),
+    path('xml/', show_xml, name='show_xml'),
+    path('json/', show_json, name='show_json'),
+    path('xml/<int:id>/', show_xml_by_id, name='show_xml_by_id'),
+    path('json/<int:id>/', show_json_by_id, name='show_json_by_id'),
+]
+```
+
+## **Perbedaan antara form POST dan form GET dalam Django**
+Tujuan utama dari `POST` adalah untuk mengirim data ke server agar diproses dan diperbaharui.`POST` juga dapat digunakan untuk menghapus sumber data yang ada pada server. Hal tersebut dapat saja mengubah keadaan server.
+
+Sedangkan `GET` memiliki tujuan utama mengambil data dari server. Saat kita mengajukan `GET` kita meminta server mengembalikan informasi sesuai yang kita minta. Hal tersebut tidak mengubah apapun dari server.
+
+## **Perbedaan utama antara XML, JSON, dan HTML dalam konteks pengiriman data**
+1. Tujuan
+    XML(eXtensible Markup Language) adalah salah satu bahasa pemrograman yang di desain untuk menyimpan dan mengangkut data. Sedangkan JSON(JavaScript Object Notation) adalah format pertukaran data yang ringan yang umumnya digunakan agar terbaca oleh manusia. Dan HTML(Hypertext Markup Language) adalah salah satu bahasa pemrograman yang ditujukan untuk membuat struktur dari sebuah laman web
+
+2. Syntax
+    XML : 
+    ```xml
+    <person>
+    <name>Alice Johnson</name>
+    <age>25</age>
+    <address>
+        <street>123 Main St</street>
+        <city>Los Angeles</city>
+        <zip>90001</zip>
+    </address>
+    </person>
+    ```
+
+    JSON:
+    ```json
+    {
+    "name": "Alice Johnson",
+    "age": 25,
+    "address": {
+        "street": "123 Main St",
+        "city": "Los Angeles",
+        "zip": "90001"
+    }
+    }
+    ```
+
+    HTML: Karena HTML berfokus pada web, HTML umumnya tidak didesain untuk menyimpan data.
+
+## **Mengapa JSON sering digunakan dalam pertukaran data antara aplikasi web modern?**
+1. Karena ringan dan kecilnya ukuran data. Sehingga membuat transfer data lebih efisien.
+2. Dapat terbaca oleh manusia dengan mudah (human-readable).
+3. Mudah dimengerti aplikasi web.
+4. Keamanan yang lebih terjaga karena tidak memungkinkan untuk eksekusi kode.
+5. Dapat menyimpan berbagai tipe data.
+
+## **Screenshot hasil akses URL pada Postman**
+### **HTML**
+![Alt text](gambar/postman-html.jpg)
+
+### **XML**
+![Alt text](gambar/postman-xml.jpg)
+
+### **JSON**
+![Alt text](gambar/postman-json.jpg)
+
+### **XML by ID**
+![Alt text](gambar/postman-xml-id-[1].jpg)
+
+### **JSON by ID**
+![Alt text](gambar/postman-json-id[2].jpg)

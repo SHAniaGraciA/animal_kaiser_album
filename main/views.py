@@ -1,40 +1,46 @@
 from django.shortcuts import render
-
+from django.http import HttpResponseRedirect
+from main.forms import ItemForm
+from django.urls import reverse
+from main.models import Item
+from django.http import HttpResponse
+from django.core import serializers 
 # Create your views here.
 def show_main(request):
+
+    item = Item.objects.all()
     context = {
         'char_name' : 'Bonaparte',
         'role': 'Stealth Assasin',
-        'items': [
-            {
-                'name': 'Smoke Bomb',
-                'description': 'Use it to easily dissapear from enemy sight ',
-                'category': 'Throwable',
-                'amount': 5,
-                
-            },
-            {
-                'name': 'Bandage',
-                'description': 'Use it to heal your wound and recover 35 HP',
-                'category': 'Consumable',
-                'amount': 3,
-        
-            },
-            {
-                'name': 'Money',
-                'description': 'Use it to fulfill your needs without rob & kill',
-                'category': 'Tradeable',
-                'amount': 900,
-            },
-            {
-                'name': 'Golden Chest',
-                'description': 'Open it to get some rewards after completing mission',
-                'category': 'Other',
-                'amount': 10,
-            },
-            
-        ]
+        'items': item
     }
+    
     
 
     return render(request, "main.html", context)
+
+def create_item(request):
+    form = ItemForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "create_item.html", context)
+
+def show_xml(request):
+    data = Item.objects.all()
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+def show_json(request):
+    data = Item.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_xml_by_id(request, id):
+    data = Item.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+def show_json_by_id(request, id):
+    data = Item.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
