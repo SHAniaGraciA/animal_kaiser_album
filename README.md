@@ -440,16 +440,16 @@ Sedangkan `GET` memiliki tujuan utama mengambil data dari server. Saat kita meng
 
 ## **Screenshot hasil akses URL pada Postman**
 ### **HTML**
-![Alt text](gambar/postman-html.jpg)
+![Alt text](gambar/postman-html.png)
 
 ### **XML**
-![Alt text](gambar/postman-xml.jpg)
+![Alt text](gambar/postman-xml.png)
 
 ### **JSON**
-![Alt text](gambar/postman-json.jpg)
+![Alt text](gambar/postman-json.png)
 
 ### **XML by ID**
-![Alt text](gambar/postman-xml-id-[1].jpg)
+![Alt text](gambar/postman-xml-id-[1].png)
 
 ### **JSON by ID**
-![Alt text](gambar/postman-json-id[2].jpg)
+![Alt text](gambar/postman-json-id[2].png)
