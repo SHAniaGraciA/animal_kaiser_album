@@ -449,7 +449,7 @@ Sedangkan `GET` memiliki tujuan utama mengambil data dari server. Saat kita meng
 ![Alt text](gambar/postman-json.png)
 
 ### **XML by ID**
-![Alt text](gambar/postman-xml-id-[1].png)
+![Alt text](gambar/postman-xml-id[1].png)
 
 ### **JSON by ID**
 ![Alt text](gambar/postman-json-id[2].png)
