@@ -23,6 +23,12 @@
         padding: 5px;
         color: rgb(59, 6, 17);
     }
+    .but{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+    }
     h1{
         color: #fff;
         text-align: center;
@@ -55,6 +61,31 @@
         background-color: rgb(130, 5, 5);
         width: 5px;
     }
+    button {
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background-color: rgb(130, 5, 5);
+        border: 2px solid #25316D;
+        border-radius: 10px;
+        margin-top: 20px;
+        padding: 10px 10px;
+        color: #fff;
+        display: flex;
+        padding: 10px 20px;
+        display: inline-block;
+        font-size: 15px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 5px;
+        text-decoration: none;
+    }   
+    .center-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px
+    }
 </style>
 <h1>Backpack</h1>
 <h2>{{ char_name }}</h2>
@@ -79,9 +110,10 @@
 </table>
 <br />
 
-
-<a href="{% url 'main:create_item' %}">
-    <button>
-        Add New Item
-    </button>
-</a>
+<div class="center-button">
+    <a href="{% url 'main:create_item' %}">
+        <button>
+            Add New Item
+        </button>
+    </a>
+</div>
