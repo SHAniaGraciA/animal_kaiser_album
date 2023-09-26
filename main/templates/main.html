@@ -88,8 +88,7 @@
     }
 </style>
 <h1>Backpack</h1>
-<h2>{{ char_name }}</h2>
-<h3>{{ role }}</h3>
+<h2>{{ user }}</h2>
 <script></script>
 <table>
     <tr>
@@ -116,4 +115,15 @@
             Add New Item
         </button>
     </a>
+
+    <a href="{% url 'main:logout' %}">
+        <button>
+            Logout
+        </button>
+    </a>
+
+    
 </div>
+
+<h3>Last Accessed To Backpack: {{ last_login }}</h3>
+
