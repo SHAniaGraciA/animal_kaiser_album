@@ -95,7 +95,9 @@
         <th>Name</th>
         <th>Category</th>
         <th>Amount</th>
-        <th>Description</th
+        <th>Description</th>
+        <th>Add/Remove</th>
+        
     </tr>
     
     {% for item in items %}
@@ -104,6 +106,20 @@
             <td>{{ item.category }}</td>
             <td>{{ item.amount }}</td>
             <td>{{ item.description }}</td>
+            <td>
+                <form method="POST" action="{% url 'main:add_amount_button' item.id %}">
+                    {% csrf_token %}
+                    <button type="submit">+</button>
+                </form>
+                <form method="POST" action="{% url 'main:reduce_amount_button' item.id %}">
+                    {% csrf_token %}
+                    <button type="submit">-</button>
+                </form>
+                <form method="POST" action="{% url 'main:remove_item_button' item.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Remove</button>
+                </form>
+            </td>
         </tr>
     {% endfor %}
 </table>

@@ -10,16 +10,17 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages 
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 @login_required(login_url='/login')
 def show_main(request):
 
-    item = Item.objects.filter(user=request.user)
+    items = Item.objects.filter(user=request.user)
     context = {
         'user' : request.user.username,
         #'role': 'Stealth Assasin',
-        'items': item,
+        'items': items,
         'last_login' : request.COOKIES['last_login'],
     }
     
@@ -70,6 +71,31 @@ def logout_user(request):
     response.delete_cookie('last_login')
     return response
 
+def add_amount_button(request, item_id):
+    item = get_object_or_404(Item, pk=item_id) #Mengakses item yang ingin dimodifikasi
+    item.user = request.user; 
+    if item.amount > 0:
+        item.amount += 1
+        item.save()
+    return redirect('main:show_main')
+
+def reduce_amount_button(request, item_id):
+    item = get_object_or_404(Item, pk=item_id)
+    item.user = request.user;
+    if item.amount > 1:
+        item.amount -= 1
+        item.save()
+    else:
+        item.delete();
+    return redirect('main:show_main')
+
+def remove_item_button(request, item_id):
+    item = get_object_or_404(Item, pk=item_id)
+    item.user = request.user;
+    item.delete()
+    return redirect('main:show_main')
+
+    
 def show_xml(request):
     data = Item.objects.all()
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
