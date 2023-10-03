@@ -750,3 +750,334 @@ Cookies tidak dapat disimpulkan aman atau tidak aman dalam pengembangan web. Per
 4. Hukum proteksi data
 5. Tracking via cookie
 
+## **Kustomisasi halaman login, register, dan tambah inventori semenarik mungkin.**
+
+1. Masuk ke file yang ingin dipercantik
+2. Berikan `id / class` pada fungsi yang akan diubah, hal ini bertujuan untuk mempermudah dalam editing
+3. Setelah memberikan `id / class` sesuai dengan yang diinginkan, lalu mulai edit dengan membuat tag `<style>...</style>`
+4. Lalu buat css untuk mengedit fungsi yang diinginkan didalam tag `<style>...</style>`
+5. Beginilah css yang ada di file `login.html` saya
+
+```html
+<style>
+    *{
+        font-family: Georgia;
+        background-color: #58595c;
+    }
+    .inputarea{
+        color:aliceblue;
+    }
+    .wrap{
+        display: flex;
+        justify-content: space-between;
+        font-size: 25px;
+        width: 100%;
+        height: 70px;
+        box-shadow: 0 7px 15px 0 rgba(252, 251, 252, 0.692);
+    }
+    .brand{
+        display: flex;
+        flex-direction: row;
+        font-size: 2em;
+        padding: 5px;
+        color: rgb(59, 6, 17);
+    }
+    
+    h1{
+        color: bisque;
+        text-align: center;
+        font-size: 30px;
+    }
+    ul,li,form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: left;
+        flex-direction: column;
+        padding: 20px;
+        color: lightgoldenrodyellow;
+    }
+    input{
+        width: 300px;
+        height: 20px;
+        margin: 10px;
+        border-radius: 5px;
+        border: 1px solid #09022e;
+        padding: 5px;
+        color:azure;
+    }
+    textarea{
+        margin: 10px;
+        border-radius: 5px;
+        border: 1px solid #09022e;
+        padding: 5px;
+        color:azure;
+   
+    }
+    input[type=submit] {
+        width: 100px;
+        height: 30px;
+        background-color: rgb(130, 5, 5);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    h4{
+        color: bisque;
+        text-align: center;
+        font-size: 10px;
+    }
+</style>
+```
+
+6. Berikutnya css pada file `register.html`
+```html
+
+<style>
+
+*{
+        font-family: Georgia;
+        background-color: #58595c;
+    }
+    .inputarea{
+        color:aliceblue;
+    }
+    ul,li{
+        color: lightgoldenrodyellow;
+    }
+    h1{
+        color: bisque;
+        text-align: center;
+        font-size: 30px;
+    }
+    form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: left;
+        flex-direction: column;
+        padding: 20px;
+        color: lightgoldenrodyellow;
+    }
+    input{
+        width: 300px;
+        height: 20px;
+        margin: 10px;
+        border-radius: 5px;
+        border: 1px solid #09022e;
+        padding: 5px;
+        color:azure;
+    }
+    textarea{
+        margin: 10px;
+        border-radius: 5px;
+        border: 1px solid #09022e;
+        padding: 5px;
+        color:azure;
+   
+    }
+    input[type=submit] {
+        width: 100px;
+        height: 30px;
+        background-color: rgb(130, 5, 5);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+```
+
+7. Selanjutnya pada file `create_item.html`
+```html
+<style>
+    *{
+        font-family: Georgia;
+        background-color: #58595c;
+    }
+    .inputarea{
+        color:aliceblue;
+    }
+    h1{
+        color: bisque;
+        text-align: center;
+        font-size: 30px;
+    }
+    form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: left;
+        flex-direction: column;
+        padding: 20px;
+    }
+    input{
+        width: 300px;
+        height: 20px;
+        margin: 10px;
+        border-radius: 5px;
+        border: 1px solid #09022e;
+        padding: 5px;
+        color:azure;
+    }
+    textarea{
+        margin: 10px;
+        border-radius: 5px;
+        border: 1px solid #09022e;
+        padding: 5px;
+        color:azure;
+   
+    }
+    input[type=submit] {
+        width: 100px;
+        height: 30px;
+        background-color: rgb(130, 5, 5);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+```
+
+## Manfaat dari setiap element selector dan kapan waktu yang tepat untuk menggunakannya.
+
+1. `Element Selector`, merupakan selector yang berfungsi untuk memilih elemen HTML berdasarkan nama dari elemen yang di pilih. 
+   1. `Element selector` cocok digunakan untuk mengaplikasikan style CSS pada semua elemen dengan tag yang sama. Sebagai contoh p untuk memilih semua paragraf dalam HTML:
+   
+```html
+<style>
+p {
+  text-align: center;
+  color: red;
+}
+```
+
+2. `Class Selector`, merupakan selector yang berfungsi untuk memilih elemen HTML berdasarkan atribut class yang di select.
+   1. `Class selector` cocok digunakan untuk mengaplikasikan style pada elemen yang memiliki karakteristik yang sama dan cocok untuk dikelompokkan dalam kelompok tertentu. Sebagai contoh, semua elemen dengan class="center" akan di select untuk dibuat menjadi center dan diwarnai merah:
+
+```html
+<style>
+.center {
+  text-align: center;
+  color: red;
+}
+```
+
+3. `ID Selector`, merupakan selector yang berfungsi untuk memilih elemen HTML berdasarkan atribut ID yang didefinisikan. 
+   1. `ID selector` cocok digunakan untuk ketika ingin mengaplikasikan style khusus pada satu elemen tertentu dalam HTML. Hal ini karena ID merupakan elemen yang unik dan ID selector digunakan untuk satu elemen khusus. Contoh jika ingin mengaplikasikan dalam elemen dengan id="para1":
+
+```html
+<style>
+#para1 {
+  text-align: center;
+  color: red;
+}
+```
+
+4. `Attribute Selector`, merupakan selector yang berfungsi untuk memilih elemen HTML berdasarkan atribut spesifik yang dipilih.
+   1. `Attribute selector` cocok digunakan ketika ingin mengaplikasikan style atau pada elemen-elemen yang memiliki atribut tertentu. Sebagai contoh, jika ingin mengaplikasikan dalam elemen dengan atribut draggable="true":
+
+```html
+<style>
+p[draggable] {
+    color: red;
+}
+```
+
+5. `Universal Selector`, merupakan selector yang berfungsi untuk memilih semua elemen HTML dalam halaman.
+   1. `Universal selector` cocok digunakan ketika ingin mengaplikasikan style untuk keseluruhan elemen HTML dalam halaman. Sebagai contoh kita ingin mengubah seluruh text menjadi center aligned dan berwarna biru:
+
+```html
+<style>
+* {
+  text-align: center;
+  color: blue;
+}
+```
+
+Sumber : [CSS Selectors](https://www.w3schools.com/css/css_selectors.asp#:~:text=CSS%20selectors%20are%20used%20to,a%20specific%20relationship%20between%20them)
+
+## **HTML5 Tag**
+
+1. `<a>`: Tag ini digunakan untuk membuat hyperlink, yang menghubungkan satu halaman ke halaman lain, atau ke sumber daya lain, seperti email atau file. Atribut 'href' digunakan untuk menentukan URL tujuan.
+
+2. `<abbr>`: Tag ini digunakan untuk menandai singkatan atau akronim. Atribut 'title' dapat digunakan untuk memberikan penjelasan lengkap dari singkatan tersebut.
+
+3.` <br>`: Tag 'break line'. Digunakan untuk memasukkan jeda baris dalam teks.
+
+4. `<body>`: Tag ini mendefinisikan isi dari dokumen HTML. Semua konten yang ditampilkan di browser (teks, gambar, video, dll) berada di dalam tag `<body>`.
+
+5. `<button>`: Digunakan untuk membuat tombol yang dapat diklik. Biasanya digunakan dalam formulir atau untuk trigger JavaScript.
+
+6. `<center>` (Tidak disarankan untuk digunakan): Tag ini digunakan untuk menyelaraskan konten ke tengah. Namun, penggunaannya sudah dianggap usang dan sebaiknya gunakan CSS untuk penyelarasan.
+
+7. `<div>`: Tag 'division'. Digunakan sebagai wadah untuk konten lain dan sering digunakan bersama dengan CSS untuk styling dan layout.
+
+8. `<font>` (Tidak disarankan untuk digunakan): Digunakan untuk mendefinisikan warna, ukuran, dan jenis huruf teks. Namun, penggunaannya sudah dianggap usang dan sebaiknya gunakan CSS untuk styling teks.
+
+9. `<footer>`: Digunakan untuk mendefinisikan footer dari sebuah dokumen atau section. Biasanya berisi informasi hak cipta, link ke kebijakan privasi, dll.
+
+10. `<header>`: Digunakan untuk mendefinisikan header dari sebuah dokumen atau section. Bisa berisi judul, logo, navigasi, dll.
+
+11. `<head>`: Tag ini mengandung informasi meta tentang dokumen, seperti judul, link ke CSS, JavaScript, dll. Ini bukan bagian dari konten yang ditampilkan kepada pengguna.
+
+12. `<h1>` sampai `<h6>`: Ini adalah tag heading (judul). `<h1>` adalah judul utama dan paling penting, dan level kepentingannya menurun hingga `<h6>`.
+
+13. `<hr>`: 'Horizontal rule'. Digunakan untuk memasukkan garis horizontal untuk pemisah konten.
+
+14. `<li>`: 'List item'. Digunakan di dalam list (`<ul>` atau `<ol>`) untuk mendefinisikan setiap itemnya.
+
+15. `<ol>`: 'Ordered list'. Digunakan untuk membuat daftar berurutan, dimana setiap item diawali dengan angka.
+
+16. `<style>`: Digunakan untuk menambahkan styling CSS di dalam dokumen HTML.
+
+17. `<table>`: Tag ini digunakan untuk membuat sebuah tabel. Tabel adalah cara untuk menyajikan data dalam format kolom dan baris.
+
+18. `<td>`: 'Table data'. Tag ini mendefinisikan sebuah sel data dalam tabel. Biasanya berada di dalam sebuah baris tabel (<tr>).
+
+19. `<th>`: 'Table header'. Digunakan untuk mendefinisikan sel header dalam tabel, yang biasanya mengandung judul untuk kolom atau baris. Secara default, teks di dalam `<th>` ditebalkan dan diselaraskan ke tengah.
+
+20. `<tr>`: 'Table row'. Digunakan untuk mendefinisikan baris dalam tabel. Sebuah baris tabel biasanya mengandung beberapa sel data (`<td>`) atau sel header `<th>`
+
+21. `<ul>`: 'Unordered list'. Digunakan untuk membuat daftar yang tidak berurutan, di mana setiap item biasanya ditandai dengan bullet. Setiap item dalam daftar ini ditandai dengan tag `<li>`.
+
+## **Perbedaan antara Margin dan Padding**
+
+1. Margin: Mengatur ruang di luar batas elemen. Ini adalah jarak antara elemen dengan elemen lain di sekitarnya.
+2. Padding: Jarak antara konten elemen dan border elemen tersebut.
+
+## **Perbedaan antara Framework CSS Tailwind dan Bootstrap**
+
+1. Bootstrap:
+    1. Bootstrap adalah framework yang mengkombinasikan HTML, CSS, dan JS. Ia menyediakan komponen UI yang telah dirancang sebelumnya.
+    2. Memiliki basis pengguna yang besar dan banyak sumber belajar.
+    3. Tendensinya lebih berat karena mencakup berbagai komponen dan gaya.
+    4. Biasanya, Bootstrap lebih mudah untuk pemula karena komponen-komponennya lebih mudah dipahami.
+
+2. Tailwind:
+    1. Tailwind adalah framework utilitas pertama yang memungkinkan pengguna membuat desain dengan menambahkan kelas utilitas ke elemen.
+    2. Memungkinkan kontrol yang lebih besar atas desain tetapi memerlukan pemahaman yang lebih baik tentang CSS.
+    3. Lebih ringan karena pengguna hanya memuat gaya yang dibutuhkan.
+    4. Memiliki kurva belajar yang sedikit lebih tinggi tetapi sangat fleksibel.
+   
+3. Kapan menggunakan Bootstrap daripada Tailwind:
+    1. Saat pengguna ingin mempercepat proses dengan menggunakan komponen yang sudah jadi.
+    2. Saat pengguna lebih familiar dengan Bootstrap atau bekerja dengan tim yang sudah menggunakan Bootstrap.
+    3. Saat pengguna membuat prototipe dengan cepat.
+   
+4. Kapan menggunakan Tailwind daripada Bootstrap:
+   1. Saat pengguna ingin kontrol penuh atas desain dan tidak keberatan membangun dari awal.
+   2. Saat pengguna menginginkan pendekatan utilitas-first yang memungkinkan fleksibilitas lebih.
+   3. Saat pengguna mencari pendekatan yang lebih modular dan ringan.
