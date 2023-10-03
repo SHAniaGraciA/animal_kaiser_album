@@ -1,5 +1,9 @@
 <nav class="wrap">
     <div class="brand">Quest 99</div>
+    <a href="{% url 'main:logout' %}">
+        <button class="btn btn-outline-danger logout_btn" style="margin-top: 15px; margin-right: 25px;"">Logout</button>
+        </a>
+    </a>
 
 </nav>
 <title>Quest 99</title>
@@ -107,20 +111,17 @@
             <td>{{ item.amount }}</td>
             <td>{{ item.description }}</td>
             <td>
-                <form method="POST" action="{% url 'main:add_amount_button' item.id %}">
-                    {% csrf_token %}
-                    <button type="submit">+</button>
-                </form>
-                <form method="POST" action="{% url 'main:reduce_amount_button' item.id %}">
-                    {% csrf_token %}
-                    <button type="submit">-</button>
-                </form>
-                <form method="POST" action="{% url 'main:remove_item_button' item.id %}">
-                    {% csrf_token %}
-                    <button type="submit">Remove</button>
-                </form>
+                <a href="{% url 'main:edit_item' item.pk %}">
+                    <button>
+                        Edit
+                    </button>
+                </a>
+                <a href="{% url 'main:remove_item' item.pk %}">
+                    <button>
+                        Delete
+                    </button>
+                </a>
             </td>
-        </tr>
     {% endfor %}
 </table>
 <br />
@@ -132,11 +133,7 @@
         </button>
     </a>
 
-    <a href="{% url 'main:logout' %}">
-        <button>
-            Logout
-        </button>
-    </a>
+    
 
     
 </div>
