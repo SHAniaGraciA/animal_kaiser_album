@@ -1,7 +1,7 @@
 # Quest99
 
 Tautan menuju aplikasi adaptable Quest99 bisa diakses melalui [tautan ini](ristek.link/Quest99).
-Link(natanael-bonaparte-tugas.pbp.cs.ui.ac.id)
+Link [tautan ini](natanael-bonaparte-tugas.pbp.cs.ui.ac.id)
 
 ## **Membuat proyek Django baru**
 
@@ -1278,4 +1278,4 @@ Penerapan asynchronus programming pada AJAX terletak dalam kemampuannya untuk me
 ### Pilihan antara keduanya
 Jika diminta mengenai pendapat terhadap dua hal tersebut saya lebih memilih untuk menggunakan Fetch API yang merupakan teknologi terbaru sehingga menghadirkan web dengan performa yang efisian dan dengan kompabilitas pada mayoritas browser saat kini.
 
-Link : natanael-bonaparte-tugas.pbp.cs.ui.ac.id
+Link [tautan ini](natanael-bonaparte-tugas.pbp.cs.ui.ac.id)
