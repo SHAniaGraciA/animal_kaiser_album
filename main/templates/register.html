@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+    <title>Join Our Quest</title>
+{% endblock meta %}
+
+{% block content %} 
+<style>
+
+*{
+        font-family: Georgia;
+        background-color: #58595c;
+    }
+    .inputarea{
+        color:aliceblue;
+    }
+    ul,li{
+        color: lightgoldenrodyellow;
+    }
+    h1{
+        color: bisque;
+        text-align: center;
+        font-size: 30px;
+        padding-top: 50px;
+    }
+    form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: left;
+        flex-direction: column;
+        padding: 20px;
+        color: lightgoldenrodyellow;
+    }
+    input{
+        width: 300px;
+        height: 20px;
+        margin: 10px;
+        border-radius: 5px;
+        border: 1px solid #09022e;
+        padding: 5px;
+        color:azure;
+    }
+    textarea{
+        margin: 10px;
+        border-radius: 5px;
+        border: 1px solid #09022e;
+        padding: 5px;
+        color:azure;
+   
+    }
+    input[type=submit] {
+        width: 175px;
+        height: 30px;
+        background-color: rgb(130, 5, 5);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+<div class = "login">
+    
+    <h1>Join Our Quest</h1>  
+
+        <form method="POST" >  
+            {% csrf_token %}  
+            <table>  
+                {{ form.as_table }}  
+                <tr>  
+                    <td></td>
+                    <td><input type="submit" name="submit" value="Begin Your Quest"/></td>  
+                </tr>  
+            </table>  
+        </form>
+
+    {% if messages %}  
+        <ul>   
+            {% for message in messages %}  
+                <li>{{ message }}</li>  
+                {% endfor %}  
+        </ul>   
+    {% endif %}
+
+</div>  
+
+{% endblock content %}
