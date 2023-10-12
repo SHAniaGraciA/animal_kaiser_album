@@ -11,6 +11,10 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views.decorators.http import require_POST
 # Create your views here.
 
 @login_required(login_url='/login')
@@ -126,3 +130,35 @@ def show_xml_by_id(request, id):
 def show_json_by_id(request, id):
     data = Item.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def get_item_json(request):
+    item = Item.objects.filter(user=request.user)
+    item.user = request.user
+    return HttpResponse(serializers.serialize('json', item))
+
+@csrf_exempt
+def add_item_ajax(request):
+    if request.method == 'POST':
+        user = request.user
+        name = request.POST.get("name")
+        description = request.POST.get("description")
+        category = request.POST.get("category")
+        amount = request.POST.get("amount")
+
+
+        new_item = Item(user = user,name=name,description=description, category=category, amount=amount)
+        new_item.user = request.user
+        new_item.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()
+
+@csrf_exempt
+def remove_item_button(request, item_id):
+    if request.method == 'DELETE':
+        item = Item.objects.get(pk=item_id)
+        item.user = request.user
+        item.delete()
+        return HttpResponse(b"REMOVED", status=201)
+    return HttpResponseNotFound()

@@ -1,10 +1,44 @@
 {% extends 'base.html' %} 
 
 {% block content %}
+<nav class="wrap">
+    <div class="brand">Quest 99</div>
+    <div class="centered-text">Add Quest Item</div> <!-- Add this line -->
+    <a href="{% url 'main:logout' %}">
+        <button class="btn btn-outline-danger logout_btn" style="margin-top: 15px; margin-right: 25px;">Logout</button>
+    </a>
+</nav>
+
+</nav>
 <style>
     *{
         font-family: Georgia;
         background-color: #58595c;
+    }
+    .wrap{
+        display: flex;
+        justify-content: space-between;
+        font-size: 25px;
+        width: 100%;
+        height: 70px;
+        box-shadow: 0 7px 15px 0 rgba(252, 251, 252, 0.692);
+        background-color: #58595c;
+    }
+    .brand{
+        display: flex;
+        flex-direction: row;
+        font-size: 2em;
+        padding: 5px;
+        color: rgb(59, 6, 17);
+        background-color: #58595c;
+    }
+    .centered-text{
+        color: bisque;
+        text-align: center;
+        font-size: 30px;
+        background-color: #58595c;
+        padding-top: 40px;
+        padding-right: 100px;
     }
     .inputarea{
         color:aliceblue;
@@ -52,8 +86,6 @@
         align-items: center;
     }
 </style>
-<h1>Add Quest Item</h1>
-
 <form method="POST">
     {% csrf_token %}
 <div class = inputarea>

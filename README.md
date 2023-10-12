@@ -1081,3 +1081,199 @@ Sumber : [CSS Selectors](https://www.w3schools.com/css/css_selectors.asp#:~:text
    1. Saat pengguna ingin kontrol penuh atas desain dan tidak keberatan membangun dari awal.
    2. Saat pengguna menginginkan pendekatan utilitas-first yang memungkinkan fleksibilitas lebih.
    3. Saat pengguna mencari pendekatan yang lebih modular dan ringan.
+
+
+## **Mengaplikasikan AJAX dalam program**
+1. Tambahkan fitur ajax untuk add product dan delete dalam `views.py` seperti pada potongan kode berikut:
+
+```python
+def get_item_json(request):
+    item = Item.objects.filter(user=request.user)
+    item.user = request.user
+    return HttpResponse(serializers.serialize('json', item))
+
+@csrf_exempt
+def add_item_ajax(request):
+    if request.method == 'POST':
+        user = request.user
+        name = request.POST.get("name")
+        description = request.POST.get("description")
+        category = request.POST.get("category")
+        amount = request.POST.get("amount")
+
+
+        new_item = Item(user = user,name=name,description=description, category=category, amount=amount)
+        new_item.user = request.user
+        new_item.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()
+
+@csrf_exempt
+def remove_item_button(request, item_id):
+    if request.method == 'DELETE':
+        item = Item.objects.get(pk=item_id)
+        item.user = request.user
+        item.delete()
+        return HttpResponse(b"REMOVED", status=201)
+    return HttpResponseNotFound()
+```
+2. Hubungkan fungsi tambahan dari `views.py` dengan `urls.py` dengan menambahkan path
+```python
+...
+    path('get-item/', get_item_json, name='get_item_json'),
+    path('create-item-ajax/', add_item_ajax, name='add_item_ajax'),
+    path('remove_item_button/<int:item_id>/', remove_item_button, name='remove_item_button'),
+...
+```
+3. Tambahkan modal sebagai tampilan baru untuk menambah produk dalam web
+```html
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"style="background-color: rgb(130, 5, 5)">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Quest Item</h1>
+                <button type="button" class="btn-close" id="button-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form" onsubmit="return false;">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="name" class="col-form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="col-form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="col-form-label">Category</label>
+                        <input type="text" class="form-control" id="category" name="category"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="amount" class="col-form-label">Amount</label>
+                        <input type="number" class="form-control" id="amount" name="amount"></input>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="button_close" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal">Add Product</button>
+            </div>
+        </div>
+    </div>
+</div>
+```
+
+ 3. Tambahkan script berikut untuk menangani sebuah event secara asynchronus
+ ```html
+ <script>
+         async function getItems() {
+        return fetch("{% url 'main:get_item_json' %}").then((res) => res.json())
+    }
+
+    async function refreshItems() {
+        document.getElementById("item_table").innerHTML = ""
+        const items = await getItems()
+        let htmlString = `
+        <tr style="text-align: center;">
+            <th style="width: 125px;">Name</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Action</th>
+        </tr>
+        `
+        items.forEach((item) => {
+            htmlString += `
+            <tr>
+                <td>${item.fields.name}</td>
+                <td style="text-align: justify;">${item.fields.description}</td>
+                <td>${item.fields.category}</td>
+                <td>${item.fields.amount}
+                <td>
+                    <div class="btn-display">
+                        <a>
+                            <button type="button" class="btn btn-primary" id="button_edit" data-bs-dismiss="modal" onclick="editItem(${ item.pk })">Edit Item</button>
+                        </a>
+                        <a>
+                            <button type="submit" class="btn btn-outline-danger btn-sm edit-item-btn" onclick="removeItem(${item.pk})">X</button>
+                        </a>
+                    </div>
+                </item></td>
+            </tr>
+        `
+        })
+
+        document.getElementById("item_table").innerHTML = htmlString
+    }
+    </script>
+ ```
+
+4. Tambahkan refreshItem() dan synchronus function di bawah async function
+
+```JS
+
+refreshItems()
+
+    function addItem() {
+        fetch("{% url 'main:add_item_ajax' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+        }).then(refreshItems)
+
+        document.getElementById("form").reset()
+        return false
+    }
+
+    function removeItem(item_id) {
+        fetch(`remove_item_button/${item_id}/`, {
+            method: "DELETE",
+        }).then(refreshItems)
+        return false
+    }
+
+    function editItem(item_id) {
+        const editItemUrl = '/edit-item/' + item_id; 
+        window.location.href = editItemUrl;
+    }
+
+    function closeModal() {
+        document.getElementById("form").reset()
+        return false
+    }
+    
+    document.getElementById("button_add").onclick = addItem
+    document.getElementById("button_close").onclick = closeModal
+```
+
+5. Melakukan collect static untuk mengumpulkan berbagai static file dalam project
+
+6. Melakukan deployment ke PaaS Fasilkom
+
+## **Perbedaan antara asynchronous programming dengan synchronous programming.**
+Perbedaan antara asynchronus programming dengan synchronus programming dalam konteks web terletak pada perbedaan cara pemrosesannya. Sebuah web yang menggunakan synchronus programming menjadikan client harus menunggu server untuk memroses terlebih dahulu request yang dikirimkan oleh user karena pemrosesan dilakukan menggunakan satu thread. Sedangkan untuk asynchronus, program tidak dijalankan dengan menggunakan satu thread saja melainkan dapat dieksekusi secara bersamaan. Hal ini menjadikan web tetap dapat menampilkan thread lain walaupun terdapat pemrosesan sebuah thread request user.
+
+source: https://community.algostudio.net/memahami-synchronous-dan-asynchronous-dalam-pemrograman/ 
+
+## **Paradigma event-driven programming**
+Paradigma event-driven programming merupakan pendekatan pada sebuah perangakat lunak ataupun web yang dipengaruhi oleh peristiwa (event) yang terjadi selama berinteraksi dengan pengguna. Untuk menangani event tersebut maka diperlukanlah sebuah event handler yang berfungsi untuk menangani peristiwa tersebut yang berbeda dari thread program utama sehingga terjadi sebuah asynchronus programming dalam event handler. Berakhirnya event handler ditandai dengan adanya callback function untuk kembali ke thread program utama.
+
+## **Penerapan asynchronous programming pada AJAX**
+
+Penerapan asynchronus programming pada AJAX terletak dalam kemampuannya untuk menmroses beberapa thread dalam sebuah web server tanpa memblokir thread satu sama lain. Hal ini dapat dilakukan karena javascript dapat mengolah permintaan pengguna dan menerima hasilnya tanpa memberhentikan thread utama dalam program web sehingga perubahan tidak perlu dilakukan dengan refresh web.
+
+## **Fetch API dan JQuery**
+### Fetch API
+1. Fetch API adalah API modern dalam JavaScript yang menyediakan antarmuka untuk melakukan permintaan HTTP dan mengelola responsnya
+2. Memerlukan polifil atau transpiler pada beberapa browser kuno karena tidak compatible.
+3. Menggunakan Promise untuk mengelola respons dan error, yang membuat kodenya lebih bersih dan mudah dipahami.
+### JQuery
+1. jQuery adalah pustaka JavaScript yang memudahkan penggunaan dan manipulasi DOM, termasuk melakukan permintaan HTTP menggunakan teknik yang dikenal sebagai Ajax
+2. Kompatibel dengan banyak browser, termasuk versi yang lebih lama.
+3. Ketergantungan pada JQuery menyebabkan dapat  performa situs web menurun.
+
+### Pilihan antara keduanya
+Jika diminta mengenai pendapat terhadap dua hal tersebut saya lebih memilih untuk menggunakan Fetch API yang merupakan teknologi terbaru sehingga menghadirkan web dengan performa yang efisian dan dengan kompabilitas pada mayoritas browser saat kini.
+
