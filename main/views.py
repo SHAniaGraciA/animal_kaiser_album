@@ -15,6 +15,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_POST
+import json
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 # Create your views here.
 
 @login_required(login_url='/login')
@@ -42,6 +44,7 @@ def create_item(request):
     context = {'form': form}
     return render(request, "create_item.html", context)
 
+@csrf_exempt
 def register(request):
     form = UserCreationForm()
 
@@ -54,6 +57,7 @@ def register(request):
     context = {'form':form}
     return render(request, 'register.html', context)
 
+@csrf_exempt
 def login_user(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -162,3 +166,22 @@ def remove_item_button(request, item_id):
         item.delete()
         return HttpResponse(b"REMOVED", status=201)
     return HttpResponseNotFound()
+
+@csrf_exempt
+def create_item_flutter(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+
+        new_product = Item.objects.create(
+            user = request.user,
+            name = data["name"],
+            price = int(data["price"]),
+            description = data["description"]
+        )
+
+        new_product.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
