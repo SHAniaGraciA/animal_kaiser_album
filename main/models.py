@@ -9,7 +9,13 @@ class Item(models.Model):
     category = models.CharField(max_length=255)
     amount = models.IntegerField()
     
-'''class Employee(models.Model):
+class Employee(models.Model):
     name = models.CharField(max_length=255)
     age = models.IntegerField()
-    hobby = models.TextField()'''
+    hobby = models.TextField()
+    department = models.charField()
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+
+
+
+    
