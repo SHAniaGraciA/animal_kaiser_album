@@ -8,7 +8,7 @@ class Item(models.Model):
     description = models.TextField()
     category = models.CharField(max_length=255)
     amount = models.IntegerField()
-    
+    '''
 class Employee(models.Model):
     name = models.CharField(max_length=255)
     age = models.IntegerField()
@@ -17,5 +17,5 @@ class Employee(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
 
 
-
+'''
     
