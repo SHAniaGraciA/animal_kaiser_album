@@ -44,7 +44,6 @@ def create_item(request):
     context = {'form': form}
     return render(request, "create_item.html", context)
 
-@csrf_exempt
 def register(request):
     form = UserCreationForm()
 
@@ -57,7 +56,6 @@ def register(request):
     context = {'form':form}
     return render(request, 'register.html', context)
 
-@csrf_exempt
 def login_user(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -73,6 +71,7 @@ def login_user(request):
     context = {}
     return render(request, 'login.html', context)
 
+@csrf_exempt
 def logout_user(request):
     logout(request)
     response = HttpResponseRedirect(reverse('main:login'))
@@ -176,8 +175,9 @@ def create_item_flutter(request):
         new_product = Item.objects.create(
             user = request.user,
             name = data["name"],
-            price = int(data["price"]),
-            description = data["description"]
+            description = data["description"],
+            category = data["category"],
+            amount = int(data["amount"]),
         )
 
         new_product.save()
